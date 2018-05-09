@@ -32,7 +32,8 @@
             body="{{registerRequestBody}}"
             content-type="application/json"
             on-response="_registerResponse"
-            on-error="_registerError"></iron-ajax>
+            on-error="_registerError">
+        </iron-ajax>
         <iron-ajax
             id="loginRequest"
             url="http://localhost:65336/Token"
@@ -42,8 +43,8 @@
             handle-as="json"
             last-response="{{tokenInfo}}"
             on-response="_loginResponse"
-            on-error="_loginError"></iron-ajax>
-        <h2>Hello [[prop1]]!</h2>
+            on-error="_loginError">
+        </iron-ajax>
 
         <div class="section">
             <h2>Register User</h2>
@@ -80,10 +81,6 @@
             static get is() { return 'glor-auth-login'; }
             static get properties() {
                 return {
-                    prop1: {
-                        type: String,
-                        value: 'glor-auth-login'
-                    },
                     email: {
                         type: String,
                         value: 'test@test.com'
