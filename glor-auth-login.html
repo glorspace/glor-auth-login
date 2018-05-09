@@ -10,21 +10,28 @@
         <style>
             :host {
                 display: block;
-            }            
-
-            .section {
-                padding: 4px 10px;
-                margin: 20px;
+                
                 background-color: beige;
                 border-style: solid;
                 border-width: 2px;
                 border-color: brown;
                 border-radius: 10px;
+            }            
+
+            .section {
+                padding: 4px 10px;
+                margin: 20px;
+                @apply --glor-auth-login-content;
+                /* background-color: beige;
+                border-style: solid;
+                border-width: 2px;
+                border-color: brown;
+                border-radius: 10px; */
             }
 
             paper-button {
-                color: white;
-                background-color: coral;
+                color: var(--glor-auth-login-button-foreground-color, white);
+                background-color: var(--glor-auth-login-button-background-color, coral);
             }
         </style>
         <iron-ajax
@@ -59,7 +66,6 @@
 
         <iron-pages selected="{{selected}}">
             <div class="section">
-                <h2>Login User</h2>
                 <paper-input label="Email" value="{{email}}"></paper-input>
                 <paper-input label="Password" value="{{password}}" type="password"></paper-input>
                 <paper-button on-tap="_login">Login</paper-button>
@@ -68,7 +74,6 @@
                 </div>
             </div>
             <div class="section">
-                <h2>Register User</h2>
                 <paper-input label="Email" value="{{email}}"></paper-input>
                 <paper-input label="Password" value="{{password}}" type="password"></paper-input>
                 <paper-input label="Confirm Password" value="{{password}}" type="password"></paper-input>
