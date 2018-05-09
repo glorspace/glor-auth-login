@@ -15,20 +15,22 @@
             }
             
             paper-tabs {
-                color: white;
+                color: var(--glor-auth-login-tab-text-color, white);
                 background-color: var(--glor-auth-login-tab-background-color, olive);
-                --paper-tabs-selection-bar-color: coral;
+                --paper-tabs-selection-bar-color: var(--glor-auth-login-selection-bar-color, coral);
             }
 
             .section {
                 padding: 20px;
-                background-color: var(--glor-auth-login-content, beige);
+                background-color: var(--glor-auth-login-content-background-color, beige);
                 @apply --glor-auth-login-content;
             }
 
             paper-button {
+                margin: 0;
                 color: var(--glor-auth-login-button-foreground-color, white);
                 background-color: var(--glor-auth-login-button-background-color, coral);
+                @apply --glor-auth-login-button;
             }
         </style>
         <iron-ajax
