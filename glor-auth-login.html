@@ -2,6 +2,8 @@
 <link rel="import" href="../iron-ajax/iron-ajax.html">
 <link rel="import" href="../paper-input/paper-input.html">
 <link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-tabs/paper-tabs.html">
+<link rel="import" href="../iron-pages/iron-pages.html">
 
 <dom-module id="glor-auth-login">
     <template>
@@ -46,26 +48,36 @@
             on-error="_loginError">
         </iron-ajax>
 
-        <div class="section">
-            <h2>Register User</h2>
-            <paper-input label="Email" value="{{email}}"></paper-input>
-            <paper-input label="Password" value="{{password}}" type="password"></paper-input>
-            <paper-input label="Confirm Password" value="{{password}}" type="password"></paper-input>
-            <paper-button on-tap="_register">Register</paper-button>
-            <div>
-                <span>{{message}}</span>
+        <paper-tabs selected="{{selected}}">
+            <paper-tab>
+                LOGIN
+            </paper-tab>
+            <paper-tab>
+                REGISTER
+            </paper-tab>
+        </paper-tabs>
+
+        <iron-pages selected="{{selected}}">
+            <div class="section">
+                <h2>Login User</h2>
+                <paper-input label="Email" value="{{email}}"></paper-input>
+                <paper-input label="Password" value="{{password}}" type="password"></paper-input>
+                <paper-button on-tap="_login">Login</paper-button>
+                <div>
+                    <span>{{message}}</span>
+                </div>
             </div>
-        </div>
-        <div class="section">
-            <h2>Login User</h2>
-            <paper-input label="Email" value="{{email}}"></paper-input>
-            <paper-input label="Password" value="{{password}}" type="password"></paper-input>
-            <paper-button on-tap="_login">Login</paper-button>
-            <paper-button on-tap="_logout">Logout</paper-button>
-            <div>
-                <span>{{message}}</span>
+            <div class="section">
+                <h2>Register User</h2>
+                <paper-input label="Email" value="{{email}}"></paper-input>
+                <paper-input label="Password" value="{{password}}" type="password"></paper-input>
+                <paper-input label="Confirm Password" value="{{password}}" type="password"></paper-input>
+                <paper-button on-tap="_register">Register</paper-button>
+                <div>
+                    <span>{{message}}</span>
+                </div>
             </div>
-        </div>
+        </iron-pages>
     </template>
 
     <script>
@@ -81,6 +93,11 @@
             static get is() { return 'glor-auth-login'; }
             static get properties() {
                 return {
+                    selected: {
+                        type: Number,
+                        notify: true,
+                        value: 0
+                    },
                     email: {
                         type: String,
                         value: 'test@test.com'
