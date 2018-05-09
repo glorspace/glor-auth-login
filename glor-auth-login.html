@@ -1,0 +1,165 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../paper-button/paper-button.html">
+
+<dom-module id="glor-auth-login">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }            
+
+            .section {
+                padding: 4px 10px;
+                margin: 20px;
+                background-color: beige;
+                border-style: solid;
+                border-width: 2px;
+                border-color: brown;
+                border-radius: 10px;
+            }
+
+            paper-button {
+                color: white;
+                background-color: coral;
+            }
+        </style>
+        <iron-ajax
+            id="registerRequest"
+            url="http://localhost:65336/Api/Account/Register"
+            method="POST"
+            body="{{registerRequestBody}}"
+            content-type="application/json"
+            on-response="_registerResponse"
+            on-error="_registerError"></iron-ajax>
+        <iron-ajax
+            id="loginRequest"
+            url="http://localhost:65336/Token"
+            method="POST"
+            body="{{loginRequestBody}}"
+            content-type="application/x-www-form-urlencoded"
+            handle-as="json"
+            last-response="{{tokenInfo}}"
+            on-response="_loginResponse"
+            on-error="_loginError"></iron-ajax>
+        <h2>Hello [[prop1]]!</h2>
+
+        <div class="section">
+            <h2>Register User</h2>
+            <paper-input label="Email" value="{{email}}"></paper-input>
+            <paper-input label="Password" value="{{password}}" type="password"></paper-input>
+            <paper-input label="Confirm Password" value="{{password}}" type="password"></paper-input>
+            <paper-button on-tap="_register">Register</paper-button>
+            <div>
+                <span>{{message}}</span>
+            </div>
+        </div>
+        <div class="section">
+            <h2>Login User</h2>
+            <paper-input label="Email" value="{{email}}"></paper-input>
+            <paper-input label="Password" value="{{password}}" type="password"></paper-input>
+            <paper-button on-tap="_login">Login</paper-button>
+            <paper-button on-tap="_logout">Logout</paper-button>
+            <div>
+                <span>{{message}}</span>
+            </div>
+        </div>
+    </template>
+
+    <script>
+        /**
+        * `glor-auth-login`
+        * A Polymer element that handles user authentication to an ASP.NET WebApi 2 service that is using Microsoft Identity as the backing user store and token server.
+        *
+        * @customElement
+        * @polymer
+        * @demo demo/index.html
+        */
+        class GlorAuthLogin extends Polymer.Element {
+            static get is() { return 'glor-auth-login'; }
+            static get properties() {
+                return {
+                    prop1: {
+                        type: String,
+                        value: 'glor-auth-login'
+                    },
+                    email: {
+                        type: String,
+                        value: 'test@test.com'
+                    },
+                    password: {
+                        type: String,
+                        value: 'Test0!'
+                    },
+                    newPassword: {
+                        type: String
+                    },
+                    registerRequestBody: {
+                        type: Object,
+                        computed: '_computeRegisterRequestBody(email, password)'
+                    },
+                    loginRequestBody: {
+                        type: Object,
+                        computed: '_computeLoginRequestBody(email, password)'
+                    },
+                    changePasswordRequestBody: {
+                        type: Object,
+                        computed: '_computeChangePasswordRequestBody(password, newPassword)'
+                    },
+                    message: {
+                        type: String
+                    },
+                    tokenInfo: {
+                        type: Object
+                    },
+                    userInfo: {
+                        type: Object
+                    }
+                };
+            }
+            
+            _register() {
+                this.$.registerRequest.generateRequest();
+            }
+            
+            _registerResponse(event) {
+                this.message = event.response;
+            }
+            
+            _registerError(event) {
+                this.message = event.detail.error.message + " " + event.detail.request.response.message + " " + event.detail.request.response.ModelState["model.Password"];
+            }
+
+            _computeRegisterRequestBody(email, password) {
+                return {
+                    "Email": email,
+                    "Password": password,
+                    "ConfirmPassword": password
+                };
+            }
+
+            _login() {
+                this.$.loginRequest.generateRequest();
+            }
+
+            _loginResponse(event) {
+
+            }
+
+            _loginError(event) {
+                this.message = event.detail.error.message + " " + event.detail.request.response.message + " " + event.detail.request.response.ModelState["model.Password"];
+            }
+
+            _computeLoginRequestBody(email, password) {
+                return {
+                    "username": email,
+                    "password": password,
+                    "grant_type": "password"
+                };
+            }
+        }
+
+        window.customElements.define(GlorAuthLogin.is, GlorAuthLogin);
+    </script>
+</dom-module>
