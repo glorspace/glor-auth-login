@@ -74,9 +74,9 @@
         </style>
         <iron-ajax
             id="loginRequest"
-            url="http://localhost:65336/Token"
+            url="[[loginUrl]]"
             method="POST"
-            body="{{loginRequestBody}}"
+            body="[[loginRequestBody]]"
             content-type="application/x-www-form-urlencoded"
             handle-as="json"
             last-response="{{tokenInfo}}"
@@ -86,9 +86,9 @@
         </iron-ajax>
         <iron-ajax
             id="registerRequest"
-            url="http://localhost:65336/Api/Account/Register"
+            url="[[registerUrl]]"
             method="POST"
-            body="{{registerRequestBody}}"
+            body="[[registerRequestBody]]"
             content-type="application/json"
             on-response="_registerResponse"
             on-error="_registerError"
@@ -150,6 +150,12 @@
             static get is() { return 'glor-auth-login'; }
             static get properties() {
                 return {
+                    loginUrl: {
+                        type: String
+                    },
+                    registerUrl: {
+                        type: String
+                    },
                     selected: {
                         type: Number,
                         notify: true,
@@ -203,7 +209,9 @@
 
             _loginError(event) {
                 this.forceButtonDisable = false;
-                if (event.detail.request.response.error_description)
+                if (!event.detail.request.response)
+                    this.message = "There was no response from the server. Please check the login URL to make sure it is correct.";
+                else if (event.detail.request.response.error_description)
                     this.message = event.detail.request.response.error_description;
                 else
                     this.message = "Unrecognized error.";
@@ -230,7 +238,9 @@
             
             _registerError(event) {
                 this.forceButtonDisable = false;
-                if (Object.values(event.detail.request.response.ModelState)[0])
+                if (!event.detail.request.response)
+                    this.message = "There was no response from the server. Please check the registration URL to make sure it is correct.";
+                else if (Object.values(event.detail.request.response.ModelState)[0])
                     this.message = Object.values(event.detail.request.response.ModelState)[0];
                 else
                     this.message = "Unrecognized error.";
