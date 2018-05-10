@@ -34,15 +34,6 @@
             }
         </style>
         <iron-ajax
-            id="registerRequest"
-            url="http://localhost:65336/Api/Account/Register"
-            method="POST"
-            body="{{registerRequestBody}}"
-            content-type="application/json"
-            on-response="_registerResponse"
-            on-error="_registerError">
-        </iron-ajax>
-        <iron-ajax
             id="loginRequest"
             url="http://localhost:65336/Token"
             method="POST"
@@ -52,6 +43,15 @@
             last-response="{{tokenInfo}}"
             on-response="_loginResponse"
             on-error="_loginError">
+        </iron-ajax>
+        <iron-ajax
+            id="registerRequest"
+            url="http://localhost:65336/Api/Account/Register"
+            method="POST"
+            body="{{registerRequestBody}}"
+            content-type="application/json"
+            on-response="_registerResponse"
+            on-error="_registerError">
         </iron-ajax>
 
         <paper-tabs selected="{{selected}}">
@@ -67,7 +67,7 @@
             <div class="section">
                 <paper-input label="Email" value="{{email}}"></paper-input>
                 <paper-input label="Password" value="{{password}}" type="password"></paper-input>
-                <paper-button on-tap="_login">Login</paper-button>
+                <paper-button on-tap="_login" disabled$="{{_disableLogin(email, password)}}">Login</paper-button>
                 <div>
                     <span>{{message}}</span>
                 </div>
@@ -75,8 +75,8 @@
             <div class="section">
                 <paper-input label="Email" value="{{email}}"></paper-input>
                 <paper-input label="Password" value="{{password}}" type="password"></paper-input>
-                <paper-input label="Confirm Password" value="{{password}}" type="password"></paper-input>
-                <paper-button on-tap="_register">Register</paper-button>
+                <paper-input label="Confirm Password" value="{{confirmPassword}}" type="password" invalid$="{{_confirmPasswordInvalid(password, confirmPassword)}}" error-message="Passwords must match!"></paper-input>
+                <paper-button on-tap="_register" disabled$="{{_disableRegister(email, password, confirmPassword)}}">Register</paper-button>
                 <div>
                     <span>{{message}}</span>
                 </div>
@@ -103,14 +103,12 @@
                         value: 0
                     },
                     email: {
-                        type: String,
-                        value: 'test@test.com'
+                        type: String
                     },
                     password: {
-                        type: String,
-                        value: 'Test0!'
+                        type: String
                     },
-                    newPassword: {
+                    confirmPassword: {
                         type: String
                     },
                     registerRequestBody: {
@@ -125,9 +123,6 @@
                         type: String
                     },
                     tokenInfo: {
-                        type: Object
-                    },
-                    userInfo: {
                         type: Object
                     }
                 };
@@ -145,11 +140,11 @@
                 this.message = event.detail.error.message + " " + event.detail.request.response.message + " " + event.detail.request.response.ModelState["model.Password"];
             }
 
-            _computeRegisterRequestBody(email, password) {
+            _computeRegisterRequestBody(email, password, confirmPassword) {
                 return {
                     "Email": email,
                     "Password": password,
-                    "ConfirmPassword": password
+                    "ConfirmPassword": confirmPassword
                 };
             }
 
@@ -171,6 +166,18 @@
                     "password": password,
                     "grant_type": "password"
                 };
+            }
+
+            _disableLogin(username, password) {
+                return (!username || !password);
+            }
+
+            _disableRegister(email, password, confirmPassword) {
+                return (!email || !password || !confirmPassword || password !== confirmPassword);
+            }
+
+            _confirmPasswordInvalid(password, confirmPassword) {
+                return (confirmPassword!== "" && password !== confirmPassword);
             }
         }
 
