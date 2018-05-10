@@ -26,11 +26,20 @@
                 @apply --glor-auth-login-content;
             }
 
+            paper-input {
+                --paper-input-container-focus-color: var(--glor-auth-login-input-focus-color, olive);
+            }
+
             paper-button {
                 margin: 0;
                 color: var(--glor-auth-login-button-foreground-color, white);
                 background-color: var(--glor-auth-login-button-background-color, coral);
                 @apply --glor-auth-login-button;
+            }
+
+            paper-button[disabled] {
+                color: gray;
+                background-color: lightgray;
             }
         </style>
         <iron-ajax
@@ -168,8 +177,8 @@
                 };
             }
 
-            _disableLogin(username, password) {
-                return (!username || !password);
+            _disableLogin(email, password) {
+                return (!email || !password);
             }
 
             _disableRegister(email, password, confirmPassword) {
