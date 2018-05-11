@@ -62,15 +62,13 @@
             }
 
             div.message {
-                margin: 10px 0 0 0;
-                padding: 10px;
-                color: firebrick;
-                background-color: lightgray;
-                border-style: solid;
-                border-color: gray;
-                border-width: 1px;
-                border-radius: 5px;
+                margin-top: 10px;
+                padding: 10px 0;
+                color: seagreen;
+            }
 
+            div.message[error] {
+                color: firebrick;
             }
 
             iron-icon.error {
@@ -122,8 +120,10 @@
                     </div>
                 </template>
                 <template is="dom-if" if="{{message.length}}">
-                    <div class="message">
-                        <iron-icon icon="glor-auth-icons:error" class="error"></iron-icon>
+                    <div class="message" error$="{{error}}">
+                        <template is="dom-if" if="{{error}}">
+                            <iron-icon icon="glor-auth-icons:error" class="error"></iron-icon>
+                        </template>
                         {{message}}
                     </div>
                 </template>
@@ -140,8 +140,10 @@
                     </div>
                 </template>
                 <template is="dom-if" if="{{message.length}}">
-                    <div class="message">
-                        <iron-icon icon="glor-auth-icons:error" class="error"></iron-icon>
+                    <div class="message" error$="{{error}}">
+                        <template is="dom-if" if="{{error}}">
+                            <iron-icon icon="glor-auth-icons:error" class="error"></iron-icon>
+                        </template>
                         {{message}}
                     </div>
                 </template>
@@ -199,6 +201,11 @@
                         notify: true,
                         value: false
                     },
+                    error: {
+                        type: Boolean,
+                        notify: true,
+                        value: false
+                    },
                     tokenInfo: {
                         type: Object
                     }
@@ -217,10 +224,14 @@
 
             _loginResponse(event) {
                 this.forceButtonDisable = false;
+                this.error = false;
+                this.message = "Login successful.";
             }
 
             _loginError(event) {
                 this.forceButtonDisable = false;
+                this.error = true;
+
                 if (!event.detail.request.response)
                     this.message = "There was no response from the specified server.";
                 else if (event.detail.request.response.error_description)
@@ -245,12 +256,15 @@
             
             _registerResponse(event) {
                 this.forceButtonDisable = false;
-                this.message = event.response;
+                this.error = false;
+                this.message = "New user successfully registered.";
             }
             
             _registerError(event) {
-                let self = this;
                 this.forceButtonDisable = false;
+                this.error = true;
+
+                let self = this;
                 if (!event.detail.request.response)
                     this.message = "There was no response from the specified server.";
                 else if (Object.values(event.detail.request.response.ModelState)[0]) {
