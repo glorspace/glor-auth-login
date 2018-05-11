@@ -5,6 +5,7 @@
 <link rel="import" href="../paper-tabs/paper-tabs.html">
 <link rel="import" href="../paper-spinner/paper-spinner-lite.html">
 <link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="glor-auth-icons.html">
 
 <dom-module id="glor-auth-login">
     <template>
@@ -32,7 +33,7 @@
             }
 
             paper-button {
-                margin: 20px 0 0 0;
+                margin: 20px 0 10px 0;
                 color: var(--glor-auth-login-button-foreground-color, white);
                 background-color: var(--glor-auth-login-button-background-color, coral);
                 @apply --glor-auth-login-button;
@@ -61,7 +62,7 @@
             }
 
             div.message {
-                margin: 20px 0 0 0;
+                margin: 10px 0 0 0;
                 padding: 10px;
                 color: firebrick;
                 background-color: lightgray;
@@ -70,6 +71,11 @@
                 border-width: 1px;
                 border-radius: 5px;
 
+            }
+
+            iron-icon.error {
+                height: 16px;
+                padding-bottom: 2px;
             }
         </style>
         <iron-ajax
@@ -100,7 +106,7 @@
                 LOGIN
             </paper-tab>
             <paper-tab>
-                REGISTER
+                NEW USER
             </paper-tab>
         </paper-tabs>
 
@@ -116,22 +122,28 @@
                     </div>
                 </template>
                 <template is="dom-if" if="{{message.length}}">
-                    <div class="message">{{message}}</div>
+                    <div class="message">
+                        <iron-icon icon="glor-auth-icons:error" class="error"></iron-icon>
+                        {{message}}
+                    </div>
                 </template>
             </div>
             <div class="section">
                 <paper-input label="Email" value="{{email}}"></paper-input>
                 <paper-input label="Password" value="{{password}}" type="password"></paper-input>
                 <paper-input label="Confirm Password" value="{{confirmPassword}}" type="password" invalid$="{{_confirmPasswordInvalid(password, confirmPassword)}}" error-message="Passwords must match!"></paper-input>
-                <paper-button on-tap="_register" disabled$="{{_disableRegister(email, password, confirmPassword, forceButtonDisable)}}">Register</paper-button>
+                <paper-button on-tap="_register" disabled$="{{_disableRegister(email, password, confirmPassword, forceButtonDisable)}}">Register User</paper-button>
                 <template is="dom-if" if="{{loading}}">
                     <div class="spinner">
                         <paper-spinner-lite active></paper-spinner-lite>
-                        <span>Registering...</span>
+                        <span>Registering new user...</span>
                     </div>
                 </template>
                 <template is="dom-if" if="{{message.length}}">
-                    <div class="message">{{message}}</div>
+                    <div class="message">
+                        <iron-icon icon="glor-auth-icons:error" class="error"></iron-icon>
+                        {{message}}
+                    </div>
                 </template>
             </div>
         </iron-pages>
@@ -210,7 +222,7 @@
             _loginError(event) {
                 this.forceButtonDisable = false;
                 if (!event.detail.request.response)
-                    this.message = "There was no response from the server. Please check the login URL to make sure it is correct.";
+                    this.message = "There was no response from the specified server.";
                 else if (event.detail.request.response.error_description)
                     this.message = event.detail.request.response.error_description;
                 else
@@ -237,12 +249,17 @@
             }
             
             _registerError(event) {
+                let self = this;
                 this.forceButtonDisable = false;
                 if (!event.detail.request.response)
-                    this.message = "There was no response from the server. Please check the registration URL to make sure it is correct.";
-                else if (Object.values(event.detail.request.response.ModelState)[0])
-                    this.message = Object.values(event.detail.request.response.ModelState)[0];
-                else
+                    this.message = "There was no response from the specified server.";
+                else if (Object.values(event.detail.request.response.ModelState)[0]) {
+                    let modelState = Object.values(event.detail.request.response.ModelState)[0];
+                    // this gets the last message only
+                    modelState.forEach(function(message) {
+                        self.message = message;
+                    });
+                } else
                     this.message = "Unrecognized error.";
             }
 
