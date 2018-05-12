@@ -64,14 +64,14 @@
             div.message {
                 margin-top: 10px;
                 padding: 10px 0;
-                color: seagreen;
+                color: var(--glor-auth-login-tab-background-color, olive);
             }
 
             div.message[error] {
                 color: firebrick;
             }
 
-            iron-icon.error {
+            iron-icon {
                 height: 16px;
                 padding-bottom: 2px;
             }
@@ -121,9 +121,7 @@
                 </template>
                 <template is="dom-if" if="{{message.length}}">
                     <div class="message" error$="{{error}}">
-                        <template is="dom-if" if="{{error}}">
-                            <iron-icon icon="glor-auth-icons:error" class="error"></iron-icon>
-                        </template>
+                        <iron-icon icon="{{_setIcon(error)}}"></iron-icon>
                         {{message}}
                     </div>
                 </template>
@@ -141,9 +139,7 @@
                 </template>
                 <template is="dom-if" if="{{message.length}}">
                     <div class="message" error$="{{error}}">
-                        <template is="dom-if" if="{{error}}">
-                            <iron-icon icon="glor-auth-icons:error" class="error"></iron-icon>
-                        </template>
+                        <iron-icon icon="{{_setIcon(error)}}"></iron-icon>
                         {{message}}
                     </div>
                 </template>
@@ -295,6 +291,13 @@
 
             _confirmPasswordInvalid(password, confirmPassword) {
                 return (confirmPassword!== "" && password !== confirmPassword);
+            }
+
+            _setIcon(error) {
+                if (error)
+                    return "glor-auth-icons:error";
+                else
+                    return "glor-auth-icons:info";
             }
         }
 
