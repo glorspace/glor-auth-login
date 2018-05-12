@@ -17,25 +17,25 @@
             }
             
             paper-tabs {
-                color: var(--glor-auth-login-tab-text-color, white);
-                background-color: var(--glor-auth-login-tab-background-color, olive);
-                --paper-tabs-selection-bar-color: var(--glor-auth-login-selection-bar-color, coral);
+                color: var(--glor-auth-login-background-color, beige);
+                background-color: var(--glor-auth-login-primary-color, olive);
+                --paper-tabs-selection-bar-color: var(--glor-auth-login-accent-color, coral);
             }
 
             .section {
                 padding: 20px;
-                background-color: var(--glor-auth-login-content-background-color, beige);
+                background-color: var(--glor-auth-login-background-color, beige);
                 @apply --glor-auth-login-content;
             }
 
             paper-input {
-                --paper-input-container-focus-color: var(--glor-auth-login-input-focus-color, olive);
+                --paper-input-container-focus-color: var(--glor-auth-login-primary-color, olive);
             }
 
             paper-button {
                 margin: 20px 0 10px 0;
-                color: var(--glor-auth-login-button-foreground-color, white);
-                background-color: var(--glor-auth-login-button-background-color, coral);
+                color: var(--glor-auth-login-background-color, beige);
+                background-color: var(--glor-auth-login-button-color, brown);
                 @apply --glor-auth-login-button;
             }
 
@@ -45,7 +45,7 @@
             }
 
             paper-spinner-lite {
-                --paper-spinner-color: var(--glor-auth-login-spinner-color, coral);
+                --paper-spinner-color: var(--glor-auth-login-accent-color, coral);
                 width: 16px;
                 height: 16px;
             }
@@ -57,18 +57,18 @@
 
             div.spinner > span {
                 margin-left: 10px;
-                color: var(--glor-auth-login-spinner-text, olive);
+                color: var(--glor-auth-login-primary-color, olive);
                 font-size: 20px;
             }
 
             div.message {
                 margin-top: 10px;
                 padding: 10px 0;
-                color: var(--glor-auth-login-tab-background-color, olive);
+                color: var(--glor-auth-login-primary-color, olive);
             }
 
             div.message[error] {
-                color: firebrick;
+                color: var(--glor-auth-login-error-color, firebrick);
             }
 
             iron-icon {
