@@ -223,8 +223,6 @@
                 this.error = false;
                 this.message = "Login successful.";
                 this.dispatchEvent(new CustomEvent('login-success', {
-                    bubbles: true,
-                    composed: true,
                     detail: { tokenInfo: this.tokenInfo },
                 }));
             }
@@ -260,8 +258,6 @@
                 this.error = false;
                 this.message = "New user successfully registered.";
                 this.dispatchEvent(new CustomEvent('register-success', {
-                    bubbles: true,
-                    composed: true,
                     detail: { loginRequestBody: this.loginRequestBody }
                 }));
             }
