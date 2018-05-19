@@ -269,8 +269,8 @@
                 let self = this;
                 if (!event.detail.request.response)
                     this.message = "There was no response from the specified server.";
-                else if (Object.values(event.detail.request.response.ModelState)[0]) {
-                    let modelState = Object.values(event.detail.request.response.ModelState)[0];
+                else if (Object.values(event.detail.request.response.modelState)[0]) {
+                    let modelState = Object.values(event.detail.request.response.modelState)[0];
                     // this gets the last message only
                     modelState.forEach(function(message) {
                         self.message = message;
