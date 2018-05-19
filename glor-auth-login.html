@@ -86,7 +86,8 @@
             last-response="{{tokenInfo}}"
             on-response="_loginResponse"
             on-error="_loginError"
-            loading="{{loading}}">
+            loading="{{loading}}"
+            with-credentials>
         </iron-ajax>
         <iron-ajax
             id="registerRequest"
